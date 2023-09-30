@@ -1,0 +1,20 @@
+#!/bin/sh
+
+CURRENTDIR=`pwd`
+
+. /etc/os-release
+
+VERSION=`echo $VERSION_ID | sed -e 's/\..*//'`
+ARCH=`uname -m`
+
+if ! rpmbuild -ba --nodeps --define "_topdir $CURRENTDIR" --define "_builddir $CURRENTDIR/_workdir" $CURRENTDIR/SPECS/*.spec; then
+    echo
+    echo "Failed to build SRPM"
+    exit 255
+fi
+
+MOCKCONFIG="/etc/mock/rocky-${VERSION}-${ARCH}.cfg"
+
+DEFAULTMOCKARGS="--cleanup-after"
+
+#mock -r "$MOCKCONFIG" --resultdir="$CURRENTDIR" $CURRENTDIR/SRPMS/*.src.rpm --isolation=simple ${MOCKARGS:-$DEFAULTMOCKARGS}

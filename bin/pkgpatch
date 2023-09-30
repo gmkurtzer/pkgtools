@@ -1,0 +1,22 @@
+#!/bin/sh
+
+
+CURRENTDIR=`pwd`
+
+rm -rf _patchdir 2>/dev/null ||:
+
+if ! rpmbuild -bp --nodeps --define "_topdir $CURRENTDIR" --define "_builddir $CURRENTDIR/_patchdir/" $CURRENTDIR/SPECS/*.spec >/dev/null 2>&1; then
+    echo
+    echo "Failed to properly prep the RPM source patch tree"
+    exit 255
+fi
+
+cd _patchdir
+
+mv * a
+ln -s ../_workdir/* b
+
+diff -Naur a b
+
+cd $CURRENTDIR
+rm -rf _patchdir 2>/dev/null ||:

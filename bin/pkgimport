@@ -1,0 +1,46 @@
+#!/bin/sh
+
+FILE="$1"
+
+if [ ! -f "$FILE" ]; then
+    echo "USAGE: $0 [SRPM FILE]"
+    exit 1
+fi
+
+PKGNAME=`rpm -qp "$FILE"  --qf '%{NAME}\n' 2>/dev/null`
+
+if [ -z "$PKGNAME" ]; then
+    echo "Could not obtain SRPM package name"
+    exit 5
+fi
+
+echo "Setting up new package for $PKGNAME"
+
+if ! mkdir -p "$PKGNAME"; then
+    echo "Could not create directory for package"
+    exit 255
+fi
+
+if ! mkdir -p "$PKGNAME/SOURCES"; then
+    echo "Could not create SOURCES directory"
+    exit 255
+fi
+
+if ! mkdir -p "$PKGNAME/SPECS"; then
+    echo "Could not create SPECS directory"
+    exit 255
+fi
+
+if ! cd "$PKGNAME/SOURCES"; then
+    echo "Could not change directory to package dir"
+    exit 255
+fi
+
+rpm2cpio "$FILE" | cpio -id --quiet
+
+if ! mv *.spec ../SPECS; then
+    echo "Could not move the SPEC file into $PKGNAME/SPECS"
+    exit 255
+fi
+
+echo "Done, results can be found in `pwd`"

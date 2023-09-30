@@ -1,0 +1,12 @@
+#!/bin/sh
+
+CURRENTDIR=`pwd`
+
+if ! rpmbuild -bp --nodeps --define "_topdir $CURRENTDIR" --define "_builddir $CURRENTDIR/_workdir" $CURRENTDIR/SPECS/*.spec; then
+    echo
+    echo "Failed to properly prep the RPM source tree"
+    exit 255
+fi
+
+echo
+echo "Sources are available in _workdir/"
