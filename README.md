@@ -1,10 +1,14 @@
-# rpmtools
+# pkgtools
 
 These are some very rough scripts that I use for manipulating and patching RPM files. Feel free to use.
 
 Prepare your system:
 ```
+$ mkdir ~/bin
+$ install -m 755 bin/pkg* ~/bin
 $ sudo dnf groupinstall "Development Tools"
+
+# If you want to build packages with Mock
 $ sudo dnf install mock
 $ sudo usermod -G mock `whoami`
 ```
