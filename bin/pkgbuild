@@ -7,7 +7,7 @@ CURRENTDIR=`pwd`
 VERSION=`echo $VERSION_ID | sed -e 's/\..*//'`
 ARCH=`uname -m`
 
-if ! rpmbuild -ba --nodeps --define "_topdir $CURRENTDIR" --define "_builddir $CURRENTDIR/_workdir" $CURRENTDIR/SPECS/*.spec; then
+if ! rpmbuild -ba --define "_topdir $CURRENTDIR" --define "_builddir $CURRENTDIR/_workdir" $CURRENTDIR/SPECS/*.spec; then
     echo
     echo "Failed to build SRPM"
     exit 255
