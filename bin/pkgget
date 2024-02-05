@@ -1,0 +1,16 @@
+#!/bin/sh
+
+CURRENTDIR=`pwd`
+DOWNLOADDIR="$CURRENTDIR"
+
+if ! which spectool >/dev/null 2>&1; then
+    echo "ERROR: Command 'spectool' is not found"
+    echo "ERROR: run 'sudo dnf install rpmdevtools'"
+    exit 255
+fi
+
+if test -d "SOURCES"; then
+    DOWNLOADDIR="$CURRENTDIR/SOURCES"
+fi
+
+spectool -g -C "$DOWNLOADDIR" SPECS/*.spec

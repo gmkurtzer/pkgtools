@@ -2,6 +2,12 @@
 
 CURRENTDIR=`pwd`
 
+if ! pkgget; then
+    echo
+    echo "Failed to build SRPM"
+    exit 255
+fi
+
 if ! rpmbuild -bp --nodeps --define "_topdir $CURRENTDIR" --define "_builddir $CURRENTDIR/_workdir" $CURRENTDIR/SPECS/*.spec; then
     echo
     echo "Failed to properly prep the RPM source tree"
